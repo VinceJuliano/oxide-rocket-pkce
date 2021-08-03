@@ -40,8 +40,8 @@ use oxide_auth::primitives::prelude::{
 use oxide_auth::{ 
     code_grant::extensions::Pkce,
     endpoint::{
-        WebRequest,
-        AuthorizationFlow,
+        WebRequest, 
+        AuthorizationFlow, AccessTokenFlow, RefreshFlow
     },
     frontends::simple::extensions::{AddonList,Extended},
 };
@@ -148,10 +148,18 @@ fn token<'r>(
     mut oauth: OAuthRequest<'r>, body: Data, state: State<MyState>,
 ) -> Result<OAuthResponse<'r>, OAuthFailure> {
     oauth.add_body(body);
-    state
-        .endpoint()
-        .access_token_flow()
-        .execute(oauth)
+    let ep = state.endpoint();
+    let pkce_extension = Pkce::required();
+    let mut extensions = AddonList::new();
+    extensions.push_code(pkce_extension);
+    let t = Extended::extend_with(ep, extensions);
+    
+    let mut flow = match AccessTokenFlow::prepare(t){
+        Err(_) => unreachable!(),
+        Ok(flow) => flow,
+    };
+    
+    flow.execute(oauth)
         .map_err(|err| err.pack::<OAuthFailure>())
 }
 
@@ -160,10 +168,18 @@ fn refresh<'r>(
     mut oauth: OAuthRequest<'r>, body: Data, state: State<MyState>,
 ) -> Result<OAuthResponse<'r>, OAuthFailure> {
     oauth.add_body(body);
-    state
-        .endpoint()
-        .refresh_flow()
-        .execute(oauth)
+    let ep = state.endpoint();
+    let pkce_extension = Pkce::required();
+    let mut extensions = AddonList::new();
+    extensions.push_code(pkce_extension);
+    let t = Extended::extend_with(ep, extensions);
+    
+    let mut flow = match RefreshFlow::prepare(t){
+        Err(_) => unreachable!(),
+        Ok(flow) => flow,
+    };
+    
+    flow.execute(oauth)
         .map_err(|err| err.pack::<OAuthFailure>())
 }
 
