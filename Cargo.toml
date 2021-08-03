@@ -1,0 +1,23 @@
+[package]
+name = "oxide-rocket-pkce"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = "0.4.2"
+rocket_contrib = { version = "0.4.2", features = ["handlebars_templates", "serve"] }
+diesel = { version = "1.0.0", features = ["postgres", "chrono"] }
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+serde_urlencoded = "0.7.0"
+dotenv = "0.9.0"
+rocket_cors = "0.5.1"
+reqwest = { version = "0.10", features = ["blocking", "json"] }
+config = "0.9"
+chrono = { version = "0.4", features = ["serde"] }
+rand = "0.7"
+oxide-auth = "0.5.0"
+oxide-auth-rocket = "0.1.0"
