@@ -244,19 +244,6 @@ fn consent_decision<'r>(allowed: bool, _: Solicitation) -> OwnerConsent<OAuthRes
 }
 
 
-#[get("/login")]
-fn login() -> Template {
-    let context: HashMap<&str, &str> = [("name", "Jonathan")]
-        .iter().cloned().collect();
-    Template::render("login", &context)
-}
-
-#[get("/")]
-fn index() -> Template {
-    let context: HashMap<&str, &str> = [("name", "Jonathan")]
-        .iter().cloned().collect();
-    Template::render("index", &context)
-}
 
 fn main() -> Result<(), rocket_cors::Error>  {
 
@@ -288,8 +275,6 @@ fn main() -> Result<(), rocket_cors::Error>  {
     rocket::ignite()
         .mount("/static", StaticFiles::from("static"))
         .mount("/", routes![
-            index,
-            login,
             authorize, 
             authorize_consent, 
             token,
