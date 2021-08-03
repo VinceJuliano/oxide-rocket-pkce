@@ -1,7 +1,6 @@
 
 #![feature(proc_macro_hygiene, decl_macro)]
 
-use std::collections::HashMap;
 use std::io;
 use std::sync::Mutex;
 use std::borrow::Cow;
@@ -24,9 +23,7 @@ use oxide_auth::endpoint::{OwnerConsent, Solicitation};
 use oxide_auth::frontends::simple::endpoint::{
     FnSolicitor, 
     Generic, 
-    Vacant, 
-    Error, 
-    ErrorInto
+    Vacant,
 };
 use oxide_auth::primitives::registrar::RegisteredUrl;
 use oxide_auth::primitives::prelude::{
@@ -43,15 +40,13 @@ use oxide_auth::primitives::prelude::{
 use oxide_auth::{ 
     code_grant::extensions::Pkce,
     endpoint::{
-        Endpoint,Extension,OAuthError,OwnerSolicitor,Scopes,WebRequest,
-        AccessTokenFlow, AuthorizationFlow, ResourceFlow, RefreshFlow
+        WebRequest,
+        AuthorizationFlow,
     },
     frontends::simple::extensions::{AddonList,Extended},
 };
 
-use core::marker::PhantomData;
-
-use oxide_auth_rocket::{OAuthResponse, OAuthRequest, OAuthFailure, WebError};
+use oxide_auth_rocket::{OAuthResponse, OAuthRequest, OAuthFailure};
 
 struct MyState {
     registrar: Mutex<ClientMap>,
